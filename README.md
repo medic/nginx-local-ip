@@ -11,10 +11,9 @@ and provided for free by [local-ip.co](http://local-ip.co/), moreover,
 they have a free DNS service that provide wildcard DNS for any IP
 address, including private IPs:
 
-    $ dig 10-0-0-1.my.local-ip.co
-    
-    ;; ANSWER SECTION:
-    10-0-0-1.my.local-ip.co. 299    IN  A   10.0.0.1
+    $ dig 10-0-0-1.my.local-ip.co +short
+
+    10.0.0.1
 
 So having a public certificate and a public DNS that resolves to your
 local IP address, you can launch the HTTPS server to proxy
