@@ -1,0 +1,9 @@
+app:
+  build: .
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes:
+    - ./default.conf.template:/etc/nginx/templates/default.conf.template
+  environment:
+    APP_URL: $APP_URL

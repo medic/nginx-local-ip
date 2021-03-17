@@ -1,0 +1,40 @@
+server {  # Redirect incoming HTTP requests to the HTTPS port
+  listen 80;
+  return 301 https://$host$request_uri;
+}
+
+server {
+
+  server_name my.local-ip.co;
+
+  listen 443 ssl;
+
+  ssl_certificate           /etc/nginx/server.chained.pem;
+  ssl_certificate_key       /etc/nginx/server.key;
+
+  ssl_session_cache  builtin:1000  shared:SSL:10m;
+  ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
+  ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
+  ssl_prefer_server_ciphers on;
+
+  sendfile                  on;
+  tcp_nopush                on;
+
+  gzip                      on;
+
+
+  proxy_buffers             16 16k;
+  proxy_buffer_size         16k;
+  proxy_max_temp_file_size  0;
+
+  location / {
+
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto $scheme;
+
+    proxy_pass              ${APP_URL}; # Running on Docker, localhost:port is not accessible
+    proxy_read_timeout      900;        # Default 60 secs, 900 = 15 min => debugging purpose
+  }
+}
