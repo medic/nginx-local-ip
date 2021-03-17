@@ -72,6 +72,27 @@ going to use the app, in that case, no Internet connection will required,
 just a LAN connection.
 
 
+Troubleshooting
+---------
+
+### Port Conflicts
+
+If you run `docker-compose` and you get a `address already in use` error like this:
+
+```
+ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed programming external connectivity on endpoint nginx-local-ip_app_1 (5a31171148dcaa58b4053f793288aaa940f5678043d302c1c1ad87
+5cdae3a684): Error starting userland proxy: listen tcp4 0.0.0.0:443: bind: address already in use
+```                                                                                          
+
+You may need to edit the `docker-compose.yml` to use different ports.  For example, you could shift them up to 8xxx like so:
+
+```
+  ports:
+    - "8080:80"
+    - "8443:443"
+```
+
+
 Copyright
 ---------
 
