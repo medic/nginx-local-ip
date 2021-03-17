@@ -61,9 +61,9 @@ unless you want to change the certificates or the Dockerfile script.
 
 The default ports used here will conflict with the ports that medic-os uses to run. To get around that you can specify the env-file for medic-os. This will start the container using 444 and 8080 for https and http, making your instance available at `https://192-168-0-3.my.local-ip.co:444/`
 
-Command to run
+Command to run:
 
-`APP_URL=https://192.168.0.3 docker-compose --env-file=medic-os.env up`
+    APP_URL=https://192.168.0.3 docker-compose --env-file=medic-os.env up
 
 
 Requirements
