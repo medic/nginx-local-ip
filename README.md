@@ -31,7 +31,7 @@ configuration in the same machine as follow:
 
 Only the first time:
 
-    $ git clone https://github.com/mrsarm/nginx-local-ip.git
+    $ git clone https://github.com/medic/nginx-local-ip.git
 
 Then:
 
