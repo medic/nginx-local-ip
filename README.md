@@ -51,12 +51,12 @@ Your computer may also have other virtual interfaces with IP addresses
 assigned, omit them, like the IP of the _docker0_ interface.
 
 The server also opens the port 80 so if you forget to write the URL
-with https:// , Nginx redirect the request to the HTTPS version
+with https:// , Nginx redirects the request to the HTTPS version
 for you 😉.
 
 **Docker note**: A local image is created the first time executed, and
 there is no need to rebuild it if you change the Nginx configurations,
-unless you want to change the certificates or the Nginx version used.
+unless you want to change the certificates or the Dockerfile script.
 
 
 Requirements
@@ -68,7 +68,7 @@ a local connection, without complex reverse proxy connections through
 Internet like Ngrok.com, the devices that want to connect with the app
 still need access to Internet just to resolve the `*.my.local-ip.co` domain
 against the `local-ip.co` public DNS, unless you configure your own DNS server
-within your network, which need to be configured in all the devices your are
+within your network, which needs to be configured in all the devices your are
 going to use the app, in that case, no Internet connection will required,
 just a LAN connection.
 
