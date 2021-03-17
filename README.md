@@ -92,6 +92,8 @@ You may need to edit the `docker-compose.yml` to use different ports.  For examp
     - "8443:443"
 ```
 
+You would then access your dev instance with the `8443` port.  Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co` to this instead `https://192-168-0-3.my.local-ip.co:8443`.
+
 
 Copyright
 ---------
