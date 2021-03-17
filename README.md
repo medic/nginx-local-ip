@@ -57,7 +57,7 @@ for you 😉.
 there is no need to rebuild it if you change the Nginx configurations,
 unless you want to change the certificates or the Dockerfile script.
 
-Running with Medic-OS
+### Running with Medic-OS
 
 The default ports used here will conflict with the ports that medic-os uses to run. To get around that you can specify the env-file for medic-os. This will start the container using 444 and 8080 for https and http. This will make your instance available by using `https://192-168-0-3.my.local-ip.co:444/`
 
