@@ -84,13 +84,18 @@ ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed program
 5cdae3a684): Error starting userland proxy: listen tcp4 0.0.0.0:443: bind: address already in use
 ```                                                                                          
 
-You may need to edit the `docker-compose.yml` to use different ports.  For example, you could shift them up to 8xxx like so:
+You may need to change one or both ports.  For example, you could shift them up to 8xxx like so:
 
-```
-  ports:
-    - "8080:80"
-    - "8443:443"
-```
+    $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker-compose up
+
+Also a convenient environment file can be used to store the new values as suggested in the [Running with Medic-OS](#running-with-medic-os) section:
+
+**my.env file:**
+
+    HTTP=8080
+    HTTPS=444
+
+Run with: `APP_URL=https://192.168.1.3:5988 docker-compose --env-file=my.env up`
 
 You would then access your dev instance with the `8443` port.  Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co` to this instead `https://192-168-0-3.my.local-ip.co:8443`.
 
