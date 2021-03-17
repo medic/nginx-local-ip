@@ -1,8 +1,8 @@
 app:
   build: .
   ports:
-    - "${HTTP}:80"
-    - "${HTTPS}:443"
+    - "80:80"
+    - "443:443"
   volumes:
     - ./default.conf.template:/etc/nginx/templates/default.conf.template
   environment:
