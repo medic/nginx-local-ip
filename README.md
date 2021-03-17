@@ -12,7 +12,6 @@ they have a free DNS service that provide wildcard DNS for any IP
 address, including private IPs:
 
     $ dig 10-0-0-1.my.local-ip.co +short
-
     10.0.0.1
 
 So having a public certificate and a public DNS that resolves to your
@@ -101,7 +100,7 @@ Also a convenient environment file can be used to store the new values as sugges
 **my.env file:**
 
     HTTP=8080
-    HTTPS=444
+    HTTPS=8444
 
 Run with: `APP_URL=https://192.168.1.3:5988 docker-compose --env-file=my.env up`
 
