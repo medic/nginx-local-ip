@@ -80,6 +80,34 @@ going to use the app, in that case, no Internet connection will required,
 just a LAN connection.
 
 
+Troubleshooting
+---------
+
+### Port Conflicts
+
+If you run `docker-compose` and you get a `address already in use` error like this:
+
+```
+ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed programming external connectivity on endpoint nginx-local-ip_app_1 (5a31171148dcaa58b4053f793288aaa940f5678043d302c1c1ad87
+5cdae3a684): Error starting userland proxy: listen tcp4 0.0.0.0:443: bind: address already in use
+```                                                                                          
+
+You may need to change one or both ports.  For example, you could shift them up to 8xxx like so:
+
+    $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker-compose up
+
+Also a convenient environment file can be used to store the new values as suggested in the [Running with Medic-OS](#running-with-medic-os) section:
+
+**my.env file:**
+
+    HTTP=8080
+    HTTPS=444
+
+Run with: `APP_URL=https://192.168.1.3:5988 docker-compose --env-file=my.env up`
+
+You would then access your dev instance with the `8443` port.  Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co` to this instead `https://192-168-0-3.my.local-ip.co:8443`.
+
+
 Copyright
 ---------
 
