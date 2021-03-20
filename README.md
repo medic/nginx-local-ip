@@ -54,12 +54,26 @@ with https:// , Nginx redirects the request to the HTTPS version
 for you 😉.
 
 **Docker note**: A local image is created the first time executed, and
-there is no need to rebuild it if you change the Nginx configurations,
-unless you want to change the certificates or the Dockerfile script.
+there is no need to rebuild it if you change the Nginx configuration,
+unless you want to make changes in the Dockerfile script, or
+the `entrypoint.sh` file.
+
+### Public SSL certificate
+
+The startup script in the container downloads the cert files
+from [local-ip.co](http://local-ip.co/) if they were not previously
+downloaded, and checks whether they are expired, if so the script
+downloads the certs again from source.
+
+So the certs are downloaded from Internet only the first time, and
+cached in the container until they expire.
 
 ### Running with Medic-OS
 
-The default ports used here will conflict with the ports that medic-os uses to run. To get around that you can specify the env-file for medic-os. This will start the container using 444 and 8080 for https and http, making your instance available at `https://192-168-0-3.my.local-ip.co:444/`
+The default ports used here will conflict with the ports that medic-os
+uses to run. To get around that you can specify the env-file for medic-os.
+This will start the container using 444 and 8080 for https and http,
+making your instance available at `https://192-168-0-3.my.local-ip.co:444/`.
 
 Command to run:
 
@@ -92,20 +106,24 @@ ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed program
 5cdae3a684): Error starting userland proxy: listen tcp4 0.0.0.0:443: bind: address already in use
 ```                                                                                          
 
-You may need to change one or both ports.  For example, you could shift them up to 8xxx like so:
+You may need to change one or both ports.  For example, you could shift them
+up to 8xxx like so:
 
     $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker-compose up
 
-Also a convenient environment file can be used to store the new values as suggested in the [Running with Medic-OS](#running-with-medic-os) section:
+Also a convenient environment file can be used to store the new values as
+suggested in the [Running with Medic-OS](#running-with-medic-os) section:
 
 **my.env file:**
 
     HTTP=8080
-    HTTPS=444
+    HTTPS=8443
 
 Run with: `APP_URL=https://192.168.1.3:5988 docker-compose --env-file=my.env up`
 
-You would then access your dev instance with the `8443` port.  Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co` to this instead `https://192-168-0-3.my.local-ip.co:8443`.
+You would then access your dev instance with the `8443` port.
+Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co`
+to this instead `https://192-168-0-3.my.local-ip.co:8443`.
 
 
 Copyright
@@ -113,8 +131,8 @@ Copyright
 
 Copyright 2021 Medic Mobile, Inc. <hello@medic.org>.
 
-The certificates files under the `cert/` folder are property of
-**local-ip.co**.
+The SSL certificate files are downloaded from Internet at runtime,
+and are property of **local-ip.co**.
 
 
 License
