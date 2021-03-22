@@ -61,13 +61,7 @@ to change the ports mapped, only restart the container is needed.
 
 ### Public SSL certificate
 
-The startup script in the container downloads the cert files
-from [local-ip.co](http://local-ip.co/) if they were not previously
-downloaded, and checks whether they are expired, if so the script
-downloads the certs again from source.
-
-So the certs are downloaded from Internet only the first time, and
-cached in the container until they expire.
+The certs are downloaded and cached from [local-ip.co](http://local-ip.co/) on first run. On subsequent runs, the `entrypoint.sh` script checks locally whether they are expired and downloads renewed certs from  [local-ip.co](http://local-ip.co/) if needed.
 
 ### Running with Medic-OS
 
