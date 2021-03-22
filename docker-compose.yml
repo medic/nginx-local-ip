@@ -5,5 +5,6 @@ app:
     - "${HTTPS}:443"
   volumes:
     - ./default.conf.template:/etc/nginx/templates/default.conf.template
+    - ./entrypoint.sh:/entrypoint.sh
   environment:
     APP_URL: $APP_URL
