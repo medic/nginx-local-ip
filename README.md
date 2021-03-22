@@ -54,10 +54,9 @@ with https:// , Nginx redirects the request to the HTTPS version
 for you 😉.
 
 **Docker note**: A local image is created the first time executed, and
-there is no need to rebuild it if you change the Nginx configuration or
-the `entrypoint.sh` file, unless you want to make changes in
-the Dockerfile script, so if you edit the Nginx configuration, or want
-to change the ports mapped, only restart the container is needed.
+there is no need to rebuild it if you change the Nginx configuration or the `entrypoint.sh` file. Only changes to the Dockerfile script require a rebuild. If you just edit the Nginx configuration, or want to change the ports mapped, only restart the container is needed. 
+
+If you do need to rebuild the container, append `--build` on to your compose call: ` docker-compose up --build`.
 
 ### Public SSL certificate
 
