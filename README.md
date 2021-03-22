@@ -54,14 +54,23 @@ with https:// , Nginx redirects the request to the HTTPS version
 for you 😉.
 
 **Docker note**: A local image is created the first time executed, and
-there is no need to rebuild it if you change the Nginx configurations,
-unless you want to change the certificates or the Dockerfile script.
+there is no need to rebuild it if you change the Nginx configuration or the `entrypoint.sh` file. Only changes to the Dockerfile script require a rebuild. If you just edit the Nginx configuration, or want to change the ports mapped, only restart the container is needed. 
+
+If you do need to rebuild the container, append `--build` on to your compose call: ` docker-compose up --build`.
+
+### Public SSL certificate
+
+The certs are downloaded and cached from [local-ip.co](http://local-ip.co/) on first run. On subsequent runs, the `entrypoint.sh` script checks locally whether they are expired and downloads renewed certs from  [local-ip.co](http://local-ip.co/) if needed.
 
 ### Running with Medic-OS 
 
 #### Change Ports
 
-The default ports used in `nginx-local-ip` might conflict with the standard web server ports of that the `medic-os` docker image uses to run, `80` and `443`. To fix this, specify `nginx-local-ip` to use the `medic-os.env` file. Using the included `env-file` the container will avoid `80` and `443` and use `8080` and `444` for http and https respectively. Your instance will be available at `https://192-168-0-3.my.local-ip.co:444/`
+The default ports used in `nginx-local-ip` might conflict with the standard web server ports of 
+that the `medic-os` docker image uses to run, `80` and `443`. To fix this, specify `nginx-local-ip` 
+to use the `medic-os.env` file. Using the included `env-file` the container will avoid `80` and `443` 
+and use `8080` and `444` for http and https respectively. Your instance will be available 
+at `https://192-168-0-3.my.local-ip.co:444/`
 
 Command to run:
 
@@ -102,20 +111,24 @@ ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed program
 5cdae3a684): Error starting userland proxy: listen tcp4 0.0.0.0:443: bind: address already in use
 ```                                                                                          
 
-You may need to change one or both ports.  For example, you could shift them up to 8xxx like so:
+You may need to change one or both ports.  For example, you could shift them
+up to 8xxx like so:
 
     $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker-compose up
 
-Also a convenient environment file can be used to store the new values as suggested in the [Running with Medic-OS](#running-with-medic-os) section:
+Also a convenient environment file can be used to store the new values as
+suggested in the [Running with Medic-OS](#running-with-medic-os) section:
 
 **my.env file:**
 
     HTTP=8080
-    HTTPS=444
+    HTTPS=8443
 
 Run with: `APP_URL=https://192.168.1.3:5988 docker-compose --env-file=my.env up`
 
-You would then access your dev instance with the `8443` port.  Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co` to this instead `https://192-168-0-3.my.local-ip.co:8443`.
+You would then access your dev instance with the `8443` port.
+Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co`
+to this instead `https://192-168-0-3.my.local-ip.co:8443`.
 
 
 Copyright
@@ -123,8 +136,8 @@ Copyright
 
 Copyright 2021 Medic Mobile, Inc. <hello@medic.org>.
 
-The certificates files under the `cert/` folder are property of
-**local-ip.co**.
+The SSL certificate files are downloaded from Internet at runtime,
+and are property of **local-ip.co**.
 
 
 License
