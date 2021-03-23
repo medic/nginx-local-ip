@@ -62,16 +62,27 @@ If you do need to rebuild the container, append `--build` on to your compose cal
 
 The certs are downloaded and cached from [local-ip.co](http://local-ip.co/) on first run. On subsequent runs, the `entrypoint.sh` script checks locally whether they are expired and downloads renewed certs from  [local-ip.co](http://local-ip.co/) if needed.
 
-### Running with Medic-OS
+### Running with Medic-OS 
 
-The default ports used here will conflict with the ports that medic-os
-uses to run. To get around that you can specify the env-file for medic-os.
-This will start the container using 444 and 8080 for https and http,
-making your instance available at `https://192-168-0-3.my.local-ip.co:444/`.
+#### Change Ports
+
+The default ports used in `nginx-local-ip` might conflict with the standard web server ports of 
+that the `medic-os` docker image uses to run, `80` and `443`. To fix this, specify `nginx-local-ip` 
+to use the `medic-os.env` file. Using the included `env-file` the container will avoid `80` and `443` 
+and use `8080` and `444` for http and https respectively. Your instance will be available 
+at `https://192-168-0-3.my.local-ip.co:444/`
 
 Command to run:
 
     APP_URL=https://192.168.0.3 docker-compose --env-file=medic-os.env up
+    
+#### Install Certs
+    
+To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environment by having one less docker image.  First [download the certs](http://local-ip.co#ssl-certificate-for-.my.local-ip.co) then follow [the steps already published in self hosting](https://github.com/medic/cht-infrastructure/tree/master/self-hosting#ssl-certificate-installation) on how to install the certs.
+
+If the IP of your local machin is `192.168.0.3`, you could then access your instance directly at `https://192-168-0-3.my.local-ip.co/` after adding the certs. This way there is no `nginx-local-ip` container as a reverse proxy because `medic-os` hosts the certs internally.
+
+**NOTE** - You will have to manually refresh the `local-ip`  certificates if you use this approach.
 
 
 Requirements
