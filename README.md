@@ -78,7 +78,7 @@ Command to run:
     
 #### Install Certs
     
-To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environemnt by having one less docker image.  First [download the certs](http://local-ip.co#ssl-certificate-for-.my.local-ip.co) then follow [the steps already published in self hosting](https://github.com/medic/cht-infrastructure/tree/master/self-hosting#ssl-certificate-installation) on how to install the certs.
+To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environment by having one less docker image.  First [download the certs](http://local-ip.co#ssl-certificate-for-.my.local-ip.co) then follow [the steps already published in self hosting](https://github.com/medic/cht-infrastructure/tree/master/self-hosting#ssl-certificate-installation) on how to install the certs.
 
 If the IP of your local machin is `192.168.0.3`, you could then access your instance directly at `https://192-168-0-3.my.local-ip.co/` after adding the certs. This way there is no `nginx-local-ip` container as a reverse proxy because `medic-os` hosts the certs internally.
 
