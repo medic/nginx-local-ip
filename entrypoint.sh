@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ "$APP_URL" != "" ]; then
+  echo -e "$0: \033[1;1m\$APP_URL\033[0m set to \033[4;1m$APP_URL\033[0m"
+else
+  echo -e "$0: \033[1;31mERROR\033[0m The environment variable \033[1;1m\$APP_URL\033[0m needs to be set with the URL to serve, eg. http://192.168.0.28:5988" >&2
+  exit -2
+fi
+
 # SSL certificate files and source URLs
 CERT_PEM='/etc/nginx/server.pem'
 CERT_PEM_SRC='http://local-ip.co/cert/server.pem'
@@ -43,7 +50,7 @@ if [[ "$CERT_EXP_DATE_ISO" < "$TODAY_ISO" ]]; then
     echo "$0: SSL certificate expired! Installing new certificate files ..."
     install_certs
   else
-    echo "$0: ERROR SSL certificate files have been downloaded but expired since: $CERT_EXP_DATE" >&2
+    echo -e "$0: \033[1;31mERROR\033[0m SSL certificate files have been downloaded but expired since: $CERT_EXP_DATE" >&2
     exit -1
   fi
 else
