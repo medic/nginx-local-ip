@@ -12,7 +12,6 @@ they have a free DNS service that provide wildcard DNS for any IP
 address, including private IPs:
 
     $ dig 10-0-0-1.my.local-ip.co +short
-
     10.0.0.1
 
 So having a public certificate and a public DNS that resolves to your
@@ -40,7 +39,8 @@ Then:
 Note that the IP set in the `APP_URL` environment variable is passed
 as it is in your computer, but the URL to access the app in the devices
 separates each number from the IP address by `-`,
-not `.`: https://192-168-0-3.my.local-ip.co .
+not `.`: https://192-168-0-3.my.local-ip.co (when the container
+is launched you will see the public URL logged in the console).
 
 Also note you cannot use the localhost IP 127.0.0.1, it needs to
 be the IP of your wifi connection, ethernet connection, or whatever

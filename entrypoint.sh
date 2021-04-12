@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$APP_URL" != "" ]; then
-  echo -e "$0: \033[1;1m\$APP_URL\033[0m set to \033[4;1m$APP_URL\033[0m"
+  echo -e "$0: \033[1;1m\$APP_URL\033[0m set to $APP_URL"
 else
   echo -e "$0: \033[1;31mERROR\033[0m The environment variable \033[1;1m\$APP_URL\033[0m needs to be set with the URL to serve, eg. http://192.168.0.28:5988" >&2
   exit -2
@@ -16,7 +16,7 @@ CERT_CHAIN='/etc/nginx/chain.pem'
 CERT_CHAIN_SRC='http://local-ip.co/cert/chain.pem'
 CERT_CHAINED='/etc/nginx/server.chained.pem'
 
-CURL_CMD='curl -sS'
+CURL_CMD='curl -sS --max-time 15'
 
 install_certs () {
   echo "$0: Downloading '$CERT_PEM_SRC' ..."
@@ -56,6 +56,21 @@ if [[ "$CERT_EXP_DATE_ISO" < "$TODAY_ISO" ]]; then
 else
   echo "$0: SSL certificate OK. Expire after: $CERT_EXP_DATE"
 fi
+
+HTTPS_URL=$(echo "$APP_URL" | sed 's/http:/https:/' | sed 's/\./-/g' | sed -r 's/\:[0-9]+/.my.local-ip.co/g')
+if [[ "$HTTPS_URL" != *".my.local-ip.co" ]]; then
+  # When $APP_URL does not have port at the end (port 80), the last `sed` expression above is not applied
+  HTTPS_URL="$HTTPS_URL.my.local-ip.co"
+fi
+if [[ "$HTTPS" != "443" && "$HTTPS" != "" ]]; then
+  HTTPS_URL="$HTTPS_URL:$HTTPS"
+fi
+
+echo    "$0:"
+echo -e "    \033[1;1m--------------------------------------\033[0m"
+echo -e "    \033[1;1mnginx-local-ip URL:\033[0m"
+echo -e "    \033[4;32m$HTTPS_URL\033[0m"
+echo -e "    \033[1;1m--------------------------------------\033[0m"
 
 . /docker-entrypoint.sh
 
