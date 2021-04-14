@@ -13,3 +13,5 @@ services:
       - ./entrypoint.sh:/entrypoint.sh
     environment:
       APP_URL: $APP_URL
+      HTTP: $HTTP
+      HTTPS: $HTTPS
