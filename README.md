@@ -45,8 +45,8 @@ as it is in your computer, but the URL to access the app in the devices
 separates each number from the IP address by `-`
 (isn't `.`): https://192-168-0-3.my.local-ip.co .
 
-Anyway you will see the final URL when the container
-is launched logged in the console:
+Anyway, you will see the final URL logged in the console when the
+container is launched:
 
 ![nginx-local-ip startup](docs/img/nginx-local-ip-startup.png)
 
@@ -101,11 +101,11 @@ Requirements
 Only **Docker** and **Docker compose** installed are needed, and despite
 this setup helps you to connect your devices with your webapp using
 a local connection (without complex reverse proxy connections through
-Internet like Ngrok.com), the devices that want to connect with the app
+Internet like _Ngrok.com_), the devices that want to connect with the app
 still need access to Internet just to resolve the `*.my.local-ip.co` domain
 against the `local-ip.co` public DNS, unless you configure your own DNS server
-within your network, which needs to be configured in all the devices your are
-going to use the app. In that case, no Internet connection will required,
+within your network, which needs to be configured in all the devices were your
+are going to use the app. In that case, no Internet connection will required,
 just a LAN connection.
 
 
