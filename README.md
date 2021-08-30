@@ -1,14 +1,14 @@
 local-ip.co HTTPS reverse-proxy
 ===============================
 
-> 🚀 Public URLs for exposing your local webapp without
+> 🚀 Public URLs to expose your local webapp without
 >    external proxies in your LAN
 
 Set of Nginx and Docker configurations to launch a Nginx reverse proxy
-running in the HTTPS ports (443), using the public SSL certificate for
+running in the HTTPS port (443), using a public SSL certificate for
 domains `*.my.local-ip.co`. The SSL certificate is signed by a CA authority
-and provided for free by [local-ip.co](http://local-ip.co/), moreover,
-they have a free DNS service that provide wildcard DNS for any IP
+and provided for free by [local-ip.co](http://local-ip.co/). Moreover,
+they have a free DNS service that provides wildcard DNS for any IP
 address, including private IPs:
 
     $ dig 10-0-0-1.my.local-ip.co +short
@@ -17,11 +17,15 @@ address, including private IPs:
 So having a public certificate and a public DNS that resolves to your
 local IP address, you can launch the HTTPS server to proxy
 your local app built with whatever stack, and connect any browser,
-app or device that requires to access it with HTTPS like Android
-apps, that some times require secure connections.
+app or device that requires to access it with HTTPS like the Android
+apps, that some times don't work without a secure connection.
+
+
+Run
+---
 
 Eg. if your webapp runs locally in the port 5988, and your
-local IP is 192.168.0.3, you normally access to your app
+local IP is 192.168.0.3, you normally access the app
 with `http://192.168.0.3:5988` in the same device or any other
 device within the same network, but you can access your app with
 the URL https://192-168-0-3.my.local-ip.co launching the Docker
@@ -38,16 +42,22 @@ Then:
 
 Note that the IP set in the `APP_URL` environment variable is passed
 as it is in your computer, but the URL to access the app in the devices
-separates each number from the IP address by `-`,
-not `.`: https://192-168-0-3.my.local-ip.co (when the container
-is launched you will see the public URL logged in the console).
+separates each number from the IP address by `-`
+(isn't `.`): https://192-168-0-3.my.local-ip.co .
 
-Also note you cannot use the localhost IP 127.0.0.1, it needs to
-be the IP of your wifi connection, ethernet connection, or whatever
-connection your computer has with the network is connected. You
+Anyway, you will see the final URL logged in the console when the
+container is launched:
+
+![nginx-local-ip startup](docs/img/nginx-local-ip-startup.png)
+
+Also note that you cannot use the localhost IP 127.0.0.1, it needs to
+be the IP of your WiFi connection, Ethernet connection, or whatever
+connection your computer has with the network is connected to. You
 can get your IP address in a Unix system with `ifconfig` or `ip addr`.
 Your computer may also have other virtual interfaces with IP addresses
 assigned, omit them, like the IP of the _docker0_ interface.
+
+> :signal_strength: **Tip**: if your IP is defined dynamically, try with `ip addr show dynamic`.
 
 The server also opens the port 80 so if you forget to write the URL
 with https:// , Nginx redirects the request to the HTTPS version
@@ -78,9 +88,9 @@ Command to run:
     
 #### Install Certs
     
-To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environment by having one less docker image.  First [download the certs](http://local-ip.co#ssl-certificate-for-.my.local-ip.co) then follow [the steps already published in self hosting](https://github.com/medic/cht-infrastructure/tree/master/self-hosting#ssl-certificate-installation) on how to install the certs.
+To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environment by having one less docker image.  First [download the certs](http://local-ip.co#ssl-certificate-for-.my.local-ip.co) then follow [the steps already published in self hosting](https://docs.communityhealthtoolkit.org/apps/guides/hosting/ssl-cert-install/) on how to install the certs.
 
-If the IP of your local machin is `192.168.0.3`, you could then access your instance directly at `https://192-168-0-3.my.local-ip.co/` after adding the certs. This way there is no `nginx-local-ip` container as a reverse proxy because `medic-os` hosts the certs internally.
+If the IP of your local machine is `192.168.0.3`, you could then access your instance directly at `https://192-168-0-3.my.local-ip.co/` after adding the certs. This way there is no `nginx-local-ip` container as a reverse proxy because `medic-os` hosts the certs internally.
 
 **NOTE** - You will have to manually refresh the `local-ip`  certificates if you use this approach.
 
@@ -90,12 +100,12 @@ Requirements
 
 Only **Docker** and **Docker compose** installed are needed, and despite
 this setup helps you to connect your devices with your webapp using
-a local connection, without complex reverse proxy connections through
-Internet like Ngrok.com, the devices that want to connect with the app
+a local connection (without complex reverse proxy connections through
+Internet like _Ngrok.com_), the devices that want to connect with the app
 still need access to Internet just to resolve the `*.my.local-ip.co` domain
 against the `local-ip.co` public DNS, unless you configure your own DNS server
-within your network, which needs to be configured in all the devices your are
-going to use the app, in that case, no Internet connection will required,
+within your network, which needs to be configured in all the devices were your
+are going to use the app. In that case, no Internet connection will required,
 just a LAN connection.
 
 
@@ -111,7 +121,7 @@ ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed program
 5cdae3a684): Error starting userland proxy: listen tcp4 0.0.0.0:443: bind: address already in use
 ```                                                                                          
 
-You may need to change one or both ports.  For example, you could shift them
+You may need to change one or both ports. For example, you could shift them
 up to 8xxx like so:
 
     $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker-compose up
