@@ -67,9 +67,11 @@ for you 😉.
 
 The HTTP/HTTPS ports (`80`/`443`) and your local webapp port (e.g. `5988`) need to be accessible from the LAN and not blocked by your firewall. If you are using the UFW firewall (in a Linux environment) you can allow traffic on these ports _just from your local LAN_ with the following commands:
 
+> Note that you will need to use the IP ranges of subnets for your local machine. Ports `80` and `443` need to accept traffic from the IP address of your host machine and port `5988` needs to accept traffic from the IP address of the `nginx-local-ip` (on the Docker network).
+
 ```.sh
-$ sudo ufw allow proto tcp from 192.168.0.0/24 to any port 80,443,5988
-$ sudo ufw allow proto tcp from any to 192.168.0.0/24 port 80,443,5988
+$ sudo ufw allow proto tcp from 192.168.0.0/24 to any port 80,443
+$ sudo ufw allow proto tcp from  172.18.0.0/16 to any port 5988
 ```
 
 #### Docker note
