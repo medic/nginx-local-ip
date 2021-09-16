@@ -63,8 +63,19 @@ The server also opens the port 80 so if you forget to write the URL
 with https:// , Nginx redirects the request to the HTTPS version
 for you 😉.
 
-**Docker note**: A local image is created the first time executed, and
-there is no need to rebuild it if you change the Nginx configuration or the `entrypoint.sh` file. Only changes to the Dockerfile script require a rebuild. If you just edit the Nginx configuration, or want to change the ports mapped, only restart the container is needed. 
+#### Firewall
+
+The HTTP/HTTPS ports (`80`/`443`) need to accept traffic from the IP address of your host machine and your local webapp port (e.g. `5988`) needs to accept traffic from the IP address of the `nginx-local-ip` container (on the Docker network). If you are using the UFW firewall (in a Linux environment) you can allow traffic on these ports with the following commands:
+
+> Since local IP addresses can change over time, ranges are used in these rules so that the firewall configuration does not have to be updated each time a new address is assigned.
+
+```.sh
+$ sudo ufw allow proto tcp from 192.168.0.0/16 to any port 80,443
+$ sudo ufw allow proto tcp from  172.16.0.0/16 to any port 5988
+```
+
+#### Docker note
+A local image is created the first time executed, and there is no need to rebuild it if you change the Nginx configuration or the `entrypoint.sh` file. Only changes to the Dockerfile script require a rebuild. If you just edit the Nginx configuration, or want to change the ports mapped, only restart the container is needed. 
 
 If you do need to rebuild the container, append `--build` on to your compose call: ` docker-compose up --build`.
 

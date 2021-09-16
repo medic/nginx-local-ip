@@ -15,3 +15,9 @@ services:
       APP_URL: $APP_URL
       HTTP: $HTTP
       HTTPS: $HTTPS
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.16.0.0/16
