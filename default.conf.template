@@ -23,6 +23,7 @@ server {
   proxy_buffers             16 16k;
   proxy_buffer_size         16k;
   proxy_max_temp_file_size  0;
+  client_max_body_size 32M;
 
   location / {
 
