@@ -25,6 +25,11 @@ server {
   proxy_max_temp_file_size  0;
   client_max_body_size      32M; # Match maximum body parser limits from cht-core api
 
+  location = / {
+    add_header  Content-Type    application/json;
+    return 200 '{   "couchdb": "Welcome",   "version": "2.3.1",   "git_sha": "c298091a4",   "uuid": "3ed6967923ff8b83f5e7f216b4653f94",   "features": [     "pluggable-storage-engines",     "scheduler"   ],   "vendor": {     "name": "The Apache Software Foundation"   } } ';
+  }
+  
   location / {
 
     proxy_set_header        Host $host;

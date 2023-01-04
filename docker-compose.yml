@@ -10,7 +10,6 @@ services:
       - "${HTTPS}:443"
     volumes:
       - ./default.conf.template:/etc/nginx/templates/default.conf.template
-      - ./base-path.json:/usr/share/nginx/base-path.json
       - ./entrypoint.sh:/entrypoint.sh
     environment:
       APP_URL: $APP_URL
