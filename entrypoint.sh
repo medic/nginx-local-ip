@@ -9,11 +9,8 @@ fi
 
 # SSL certificate files and source URLs
 CERT_PEM='/etc/nginx/server.pem'
-CERT_PEM_SRC='http://local-ip.co/cert/server.pem'
 CERT_KEY='/etc/nginx/server.key'
-CERT_KEY_SRC='http://local-ip.co/cert/server.key'
 CERT_CHAIN='/etc/nginx/chain.pem'
-CERT_CHAIN_SRC='http://local-ip.co/cert/chain.pem'
 CERT_CHAINED='/etc/nginx/server.chained.pem'
 
 CURL_CMD='curl -sS --max-time 15'
@@ -57,10 +54,10 @@ else
   echo "$0: SSL certificate OK. Expire after: $CERT_EXP_DATE"
 fi
 
-HTTPS_URL=$(echo "$APP_URL" | sed 's/http:/https:/' | sed 's/\./-/g' | sed -r 's/\:[0-9]+/.my.local-ip.co/g')
-if [[ "$HTTPS_URL" != *".my.local-ip.co" ]]; then
+HTTPS_URL=$(echo "$APP_URL" | sed 's/http:/https:/' | sed 's/\./-/g' | sed -r "s/\:[0-9]+/.${DOMAIN}/g")
+if [[ "$HTTPS_URL" != *".${DOMAIN}" ]]; then
   # When $APP_URL does not have port at the end (port 80), the last `sed` expression above is not applied
-  HTTPS_URL="$HTTPS_URL.my.local-ip.co"
+  HTTPS_URL="$HTTPS_URL.${DOMAIN}"
 fi
 if [[ "$HTTPS" != "443" && "$HTTPS" != "" ]]; then
   HTTPS_URL="$HTTPS_URL:$HTTPS"

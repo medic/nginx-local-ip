@@ -15,6 +15,10 @@ services:
       APP_URL: $APP_URL
       HTTP: $HTTP
       HTTPS: $HTTPS
+      CERT_PEM_SRC: ${CERT_PEM_SRC:-https://local-ip.medicmobile.org/cert}
+      CERT_CHAIN_SRC: ${CERT_CHAIN_SRC:-https://local-ip.medicmobile.org/chain}
+      CERT_KEY_SRC: ${CERT_KEY_SRC:-https://local-ip.medicmobile.org/key}
+      DOMAIN: ${DOMAIN:-local-ip.medicmobile.org}
 
 networks:
   default:
