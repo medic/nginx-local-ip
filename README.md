@@ -1,4 +1,4 @@
-local-ip.co HTTPS reverse-proxy
+local-ip.medicmobile.org HTTPS reverse-proxy
 ===============================
 
 > 🚀 Public URLs to expose your local webapp without
@@ -6,12 +6,12 @@ local-ip.co HTTPS reverse-proxy
 
 Set of Nginx and Docker configurations to launch a Nginx reverse proxy
 running in the HTTPS port (443), using a public SSL certificate for
-domains `*.my.local-ip.co`. The SSL certificate is signed by a CA authority
-and provided for free by [local-ip.co](http://local-ip.co/). Moreover,
+domains `*.local-ip.medicmobile.org`. The SSL certificate is signed by a CA authority
+and provided for free by [local-ip.medicmobile.org](https://local-ip.medicmobile.org/). Moreover,
 they have a free DNS service that provides wildcard DNS for any IP
 address, including private IPs:
 
-    $ dig 10-0-0-1.my.local-ip.co +short
+    $ dig 10-0-0-1.local-ip.medicmobile.org +short
     10.0.0.1
 
 So having a public certificate and a public DNS that resolves to your
@@ -28,7 +28,7 @@ Eg. if your webapp runs locally in the port 5988, and your
 local IP is 192.168.0.3, you normally access the app
 with `http://192.168.0.3:5988` in the same device or any other
 device within the same network, but you can access your app with
-the URL https://192-168-0-3.my.local-ip.co launching the Docker
+the URL https://192-168-0-3.local-ip.medicmobile.org launching the Docker
 configuration in the same machine as follow:
 
 Only the first time:
@@ -43,7 +43,7 @@ Then:
 Note that the IP set in the `APP_URL` environment variable is passed
 as it is in your computer, but the URL to access the app in the devices
 separates each number from the IP address by `-`
-(isn't `.`): https://192-168-0-3.my.local-ip.co .
+(isn't `.`): https://192-168-0-3.local-ip.medicmobile.org .
 
 Anyway, you will see the final URL logged in the console when the
 container is launched:
@@ -81,7 +81,7 @@ If you do need to rebuild the container, append `--build` on to your compose cal
 
 ### Public SSL certificate
 
-The certs are downloaded and cached from [local-ip.co](http://local-ip.co/) on first run. On subsequent runs, the `entrypoint.sh` script checks locally whether they are expired and downloads renewed certs from  [local-ip.co](http://local-ip.co/) if needed.
+The certs are downloaded and cached from [local-ip.medicmobile.org](https://local-ip.medicmobile.org/) on first run. On subsequent runs, the `entrypoint.sh` script checks locally whether they are expired and downloads renewed certs from  [local-ip.medicmobile.org](https://local-ip.medicmobile.org/) if needed.
 
 ### Running with Medic-OS 
 
@@ -91,7 +91,7 @@ The default ports used in `nginx-local-ip` might conflict with the standard web 
 that the `medic-os` docker image uses to run, `80` and `443`. To fix this, specify `nginx-local-ip` 
 to use the `medic-os.env` file. Using the included `env-file` the container will avoid `80` and `443` 
 and use `8080` and `444` for http and https respectively. Your instance will be available 
-at `https://192-168-0-3.my.local-ip.co:444/`
+at `https://192-168-0-3.local-ip.medicmobile.org:444/`
 
 Command to run:
 
@@ -99,9 +99,9 @@ Command to run:
     
 #### Install Certs
     
-To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environment by having one less docker image.  First [download the certs](http://local-ip.co#ssl-certificate-for-.my.local-ip.co) then follow [the steps already published in self hosting](https://docs.communityhealthtoolkit.org/apps/guides/hosting/ssl-cert-install/) on how to install the certs.
+To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environment by having one less docker image.  First [download the certs](https://local-ip.medicmobile.org) then follow [the steps already published in self hosting](https://docs.communityhealthtoolkit.org/apps/guides/hosting/ssl-cert-install/) on how to install the certs.
 
-If the IP of your local machine is `192.168.0.3`, you could then access your instance directly at `https://192-168-0-3.my.local-ip.co/` after adding the certs. This way there is no `nginx-local-ip` container as a reverse proxy because `medic-os` hosts the certs internally.
+If the IP of your local machine is `192.168.0.3`, you could then access your instance directly at `https://192-168-0-3.local-ip.medicmobile.org/` after adding the certs. This way there is no `nginx-local-ip` container as a reverse proxy because `medic-os` hosts the certs internally.
 
 **NOTE** - You will have to manually refresh the `local-ip`  certificates if you use this approach.
 
@@ -113,12 +113,36 @@ Only **Docker** and **Docker compose** installed are needed, and despite
 this setup helps you to connect your devices with your webapp using
 a local connection (without complex reverse proxy connections through
 Internet like _Ngrok.com_), the devices that want to connect with the app
-still need access to Internet just to resolve the `*.my.local-ip.co` domain
-against the `local-ip.co` public DNS, unless you configure your own DNS server
+still need access to Internet just to resolve the `*.local-ip.medicmobile.org` domain
+against the `local-ip.medicmobile.org` public DNS, unless you configure your own DNS server
 within your network, which needs to be configured in all the devices were your
 are going to use the app. In that case, no Internet connection will required,
 just a LAN connection.
 
+
+Certificate & DNSs providers
+---------
+
+By default, this service works with `local-ip.medibmobile.org` (which in turn uses [localtls](https://github.com/Corollarium/localtls/)), but it can be configured to work with any provider that offers:
+* publicly downloadable TLS certificates via `curl`
+* DNS resolution based off IP-in-URL
+
+For example, if you wanted to use `local-ip.co` (though use [with caution](https://github.com/medic/cht-core/issues/8100)), you would set these four environment variables for you Docker Compose call:
+
+* `CERT_PEM_SRC` set to to `http://local-ip.co/cert/server.pem`
+* `CERT_CHAIN_SRC` set to `http://local-ip.co/cert/chain.pem`
+* `CERT_KEY_SRC`  set to `http://local-ip.co/cert/server.key`
+* `DOMAIN` set to `my.local-ip.co`
+
+Using inline variables, this would look like:
+
+```shell
+CERT_PEM_SRC=http://local-ip.co/cert/server.pem \
+CERT_CHAIN_SRC=http://local-ip.co/cert/chain.pem \
+CERT_KEY_SRC=http://local-ip.co/cert/server.key \
+DOMAIN=my.local-ip.co \
+docker-compose up 
+```
 
 Troubleshooting
 ---------
@@ -148,8 +172,8 @@ suggested in the [Running with Medic-OS](#running-with-medic-os) section:
 Run with: `APP_URL=https://192.168.1.3:5988 docker-compose --env-file=my.env up`
 
 You would then access your dev instance with the `8443` port.
-Using the sample URL from above, it would go from `https://192-168-0-3.my.local-ip.co`
-to this instead `https://192-168-0-3.my.local-ip.co:8443`.
+Using the sample URL from above, it would go from `https://192-168-0-3.local-ip.medicmobile.org`
+to this instead `https://192-168-0-3.local-ip.medicmobile.org:8443`.
 
 
 Copyright
@@ -158,7 +182,7 @@ Copyright
 Copyright 2021 Medic Mobile, Inc. <hello@medic.org>.
 
 The SSL certificate files are downloaded from Internet at runtime,
-and are property of **local-ip.co**.
+and are property of **local-ip.medicmobile.org**.
 
 
 License
