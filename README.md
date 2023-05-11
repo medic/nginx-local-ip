@@ -38,7 +38,7 @@ Only the first time:
 Then:
 
     $ cd nginx-local-ip/
-    $ APP_URL=http://192.168.0.3:5988 docker-compose up
+    $ APP_URL=http://192.168.0.3:5988 docker compose up
 
 Note that the IP set in the `APP_URL` environment variable is passed
 as it is in your computer, but the URL to access the app in the devices
@@ -77,7 +77,7 @@ $ sudo ufw allow proto tcp from  172.16.0.0/16 to any port 5988
 #### Docker note
 A local image is created the first time executed, and there is no need to rebuild it if you change the Nginx configuration or the `entrypoint.sh` file. Only changes to the Dockerfile script require a rebuild. If you just edit the Nginx configuration, or want to change the ports mapped, only restart the container is needed. 
 
-If you do need to rebuild the container, append `--build` on to your compose call: ` docker-compose up --build`.
+If you do need to rebuild the container, append `--build` on to your compose call: ` docker compose up --build`.
 
 ### Public SSL certificate
 
@@ -95,7 +95,7 @@ at `https://192-168-0-3.local-ip.medicmobile.org:444/`
 
 Command to run:
 
-    APP_URL=https://192.168.0.3 docker-compose --env-file=medic-os.env up
+    APP_URL=https://192.168.0.3 docker compose --env-file=medic-os.env up
     
 #### Install Certs
     
@@ -141,7 +141,7 @@ CERT_PEM_SRC=http://local-ip.co/cert/server.pem \
 CERT_CHAIN_SRC=http://local-ip.co/cert/chain.pem \
 CERT_KEY_SRC=http://local-ip.co/cert/server.key \
 DOMAIN=my.local-ip.co \
-docker-compose up 
+docker compose up 
 ```
 
 Troubleshooting
@@ -149,7 +149,7 @@ Troubleshooting
 
 ### Port Conflicts
 
-If you run `docker-compose` and you get a `address already in use` error like this:
+If you run `docker compose` and you get a `address already in use` error like this:
 
 ```
 ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed programming external connectivity on endpoint nginx-local-ip_app_1 (5a31171148dcaa58b4053f793288aaa940f5678043d302c1c1ad87
@@ -159,7 +159,7 @@ ERROR: for nginx-local-ip_app_1  Cannot start service app: driver failed program
 You may need to change one or both ports. For example, you could shift them
 up to 8xxx like so:
 
-    $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker-compose up
+    $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker compose up
 
 Also, a convenient environment file can be used to store the new values as
 suggested in the [Running with Medic-OS](#running-with-medic-os) section:
@@ -169,7 +169,7 @@ suggested in the [Running with Medic-OS](#running-with-medic-os) section:
     HTTP=8080
     HTTPS=8443
 
-Run with: `APP_URL=https://192.168.1.3:5988 docker-compose --env-file=my.env up`
+Run with: `APP_URL=https://192.168.1.3:5988 docker compose --env-file=my.env up`
 
 You would then access your dev instance with the `8443` port.
 Using the sample URL from above, it would go from `https://192-168-0-3.local-ip.medicmobile.org`
