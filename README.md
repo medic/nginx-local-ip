@@ -29,7 +29,7 @@ local IP is 192.168.0.3, you normally access the app
 with `http://192.168.0.3:5988` in the same device or any other
 device within the same network, but you can access your app with
 the URL https://192-168-0-3.local-ip.medicmobile.org launching the Docker
-configuration in the same machine as follow:
+configuration in the same machine as follows:
 
 Only the first time:
 
@@ -115,8 +115,8 @@ a local connection (without complex reverse proxy connections through
 Internet like _Ngrok.com_), the devices that want to connect with the app
 still need access to Internet just to resolve the `*.local-ip.medicmobile.org` domain
 against the `local-ip.medicmobile.org` public DNS, unless you configure your own DNS server
-within your network, which needs to be configured in all the devices were your
-are going to use the app. In that case, no Internet connection will required,
+within your network, which needs to be configured in all the devices were you
+are going to use the app. In that case, no Internet connection will be required,
 just a LAN connection.
 
 
@@ -161,7 +161,7 @@ up to 8xxx like so:
 
     $ HTTP=8080 HTTPS=8443 APP_URL=http://192.168.1.3:5988 docker-compose up
 
-Also a convenient environment file can be used to store the new values as
+Also, a convenient environment file can be used to store the new values as
 suggested in the [Running with Medic-OS](#running-with-medic-os) section:
 
 **my.env file:**
