@@ -4,8 +4,7 @@ local-ip.medicmobile.org HTTPS reverse-proxy
 > 🚀 Public URLs to expose your local webapp without
 >    external proxies in your LAN
 
-Set of Nginx and Docker configurations to launch a Nginx reverse proxy
-running in the HTTPS port (443), using a public SSL certificate for
+Set of Nginx and Docker configurations to launch a Nginx reverse proxy using a public SSL certificate for
 domains `*.local-ip.medicmobile.org`. The SSL certificate is signed by a CA authority
 and provided for free by [local-ip.medicmobile.org](https://local-ip.medicmobile.org/). Moreover,
 they have a free DNS service that provides wildcard DNS for any IP
@@ -14,31 +13,30 @@ address, including private IPs:
     $ dig 10-0-0-1.local-ip.medicmobile.org +short
     10.0.0.1
 
-So having a public certificate and a public DNS that resolves to your
+So, having a public certificate and a public DNS that resolves to your
 local IP address, you can launch the HTTPS server to proxy
 your local app built with whatever stack, and connect any browser,
-app or device that requires to access it with HTTPS like the Android
-apps, that some times don't work without a secure connection.
+app or device that requires to access it with HTTPS like Android
+apps that sometimes don't work without a secure connection.
 
 
 Run
 ---
 
-Eg. if your webapp runs locally in the port 5988, and your
-local IP is 192.168.0.3, you normally access the app
-with `http://192.168.0.3:5988` in the same device or any other
-device within the same network, but you can access your app with
-the URL https://192-168-0-3.local-ip.medicmobile.org launching the Docker
-configuration in the same machine as follows:
+If you have a webapp running locally on port `5988`, and your local IP is `192.168.0.3`, you would normally access the app at `http://192.168.0.3:5988` (either from the same device or any other device within the same network). 
 
-Only the first time:
+To run nginx-local-ip in front of your webapp, simply launch the Docker container with the following command:
 
-    $ git clone https://github.com/medic/nginx-local-ip.git
+```shell
+docker run --rm \
+    -e APP_URL=http://192.168.0.3:5988 \
+    -p 443:443 \
+    medicmobile/nginx-local-ip
+```
 
-Then:
+Now you should be able to access your app at `https://192-168-0-3.local-ip.medicmobile.org`! When you are done, simple cancel the command or close the terminal and the nginx-local-ip container will be automatically removed.
 
-    $ cd nginx-local-ip/
-    $ APP_URL=http://192.168.0.3:5988 docker compose up
+(See the included [Compose file](./compose.yaml) for examples of more advanced configuration options.)
 
 Note that the IP set in the `APP_URL` environment variable is passed
 as it is in your computer, but the URL to access the app in the devices
@@ -59,7 +57,7 @@ assigned, omit them, like the IP of the _docker0_ interface.
 
 > :signal_strength: **Tip**: if your IP is defined dynamically, try with `ip addr show dynamic`.
 
-The server also opens the port 80 so if you forget to write the URL
+You can also map port `80` (e.g. `-p 80:80`) so if you forget to write the URL
 with https:// , Nginx redirects the request to the HTTPS version
 for you 😉.
 
@@ -74,37 +72,30 @@ $ sudo ufw allow proto tcp from 192.168.0.0/16 to any port 80,443
 $ sudo ufw allow proto tcp from  172.16.0.0/16 to any port 5988
 ```
 
-#### Docker note
-A local image is created the first time executed, and there is no need to rebuild it if you change the Nginx configuration or the `entrypoint.sh` file. Only changes to the Dockerfile script require a rebuild. If you just edit the Nginx configuration, or want to change the ports mapped, only restart the container is needed. 
-
-If you do need to rebuild the container, append `--build` on to your compose call: ` docker compose up --build`.
+When using this Firewall configuration, you need to ensure the IP address for your nginx-local-ip container is assigned from the `172.16.0.0/16` subnet. See the `networks` configuration in the [Compose file](./compose.yaml) for an example of how to do this.
 
 ### Public SSL certificate
 
 The certs are downloaded and cached from [local-ip.medicmobile.org](https://local-ip.medicmobile.org/) on first run. On subsequent runs, the `entrypoint.sh` script checks locally whether they are expired and downloads renewed certs from  [local-ip.medicmobile.org](https://local-ip.medicmobile.org/) if needed.
 
-### Running with Medic-OS 
+Development
+-----------
 
-#### Change Ports
+If you want to make changes to the nginx-local-ip configuration, you can build the image locally.
 
-The default ports used in `nginx-local-ip` might conflict with the standard web server ports of 
-that the `medic-os` docker image uses to run, `80` and `443`. To fix this, specify `nginx-local-ip` 
-to use the `medic-os.env` file. Using the included `env-file` the container will avoid `80` and `443` 
-and use `8080` and `444` for http and https respectively. Your instance will be available 
-at `https://192-168-0-3.local-ip.medicmobile.org:444/`
+Start by cloning this repository:
 
-Command to run:
+    $ git clone https://github.com/medic/nginx-local-ip.git
 
-    APP_URL=https://192.168.0.3 docker compose --env-file=medic-os.env up
-    
-#### Install Certs
-    
-To avoid running the `nginx-local-ip` container all together, consider adding the `local-ip` certs directly to your `medic-os` container.  This simplifies your development environment by having one less docker image.  First [download the certs](https://local-ip.medicmobile.org) then follow [the steps already published in self hosting](https://docs.communityhealthtoolkit.org/apps/guides/hosting/ssl-cert-install/) on how to install the certs.
+Then you can run your local configuration with:
 
-If the IP of your local machine is `192.168.0.3`, you could then access your instance directly at `https://192-168-0-3.local-ip.medicmobile.org/` after adding the certs. This way there is no `nginx-local-ip` container as a reverse proxy because `medic-os` hosts the certs internally.
+    $ cd nginx-local-ip/
+    $ APP_URL=http://192.168.0.3:5988 docker compose up
 
-**NOTE** - You will have to manually refresh the `local-ip`  certificates if you use this approach.
+#### Docker note
+A local image is created the first time the command executed, and there is no need to rebuild it if you change the Nginx configuration. If you want to just edit the `default.conf.template` file or change the ports mapped, simply recreate the containers to pick up the changes.
 
+If you do need to rebuild the container, append `--build` on to your compose call: ` docker compose up --build`.
 
 Requirements
 ------------

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ "$APP_URL" != "" ]; then
   echo -e "$0: \033[1;1m\$APP_URL\033[0m set to $APP_URL"
