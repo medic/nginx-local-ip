@@ -34,7 +34,9 @@ docker run --rm \
     medicmobile/nginx-local-ip
 ```
 
-Now you should be able to access your app at `https://192-168-0-3.local-ip.medicmobile.org`! When you are done, simple cancel the command or close the terminal and the nginx-local-ip container will be automatically removed.
+_(After the container starts, scroll up in the terminal output to see the "nginx-local-ip URL" for your app!)_
+
+Now you should be able to access your app at `https://192-168-0-3.local-ip.medicmobile.org`! When you are done, simply cancel the command or close the terminal and the nginx-local-ip container will be automatically removed.
 
 (See the included [Compose file](./compose.yaml) for examples of more advanced configuration options.)
 

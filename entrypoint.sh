@@ -38,11 +38,10 @@ else
   install_certs
 fi
 
-CERT_EXP_DATE=$(openssl x509 -enddate -noout -in $CERT_PEM | grep -oP 'notAfter=\K.+')
-CERT_EXP_DATE_ISO=$(date -d "$CERT_EXP_DATE" '+%Y-%m-%d')
-
-TODAY_ISO=$(date '+%Y-%m-%d')
-if [[ "$CERT_EXP_DATE_ISO" < "$TODAY_ISO" ]]; then
+CERT_EXP_DATE=$(openssl x509 -enddate -noout -in $CERT_PEM | sed -n 's/^.*notAfter=//p')
+CERT_EXP_DATE_EPOCH=$(date -d "$CERT_EXP_DATE" +%s)
+TODAY_EPOCH=$(date +%s)
+if [ "$CERT_EXP_DATE_EPOCH" -lt "$TODAY_EPOCH" ]; then
   if [ "$DOWNLOAD" == "false" ]; then
     echo "$0: SSL certificate expired! Installing new certificate files ..."
     install_certs
