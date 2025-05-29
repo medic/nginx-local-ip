@@ -28,7 +28,7 @@ If you have a webapp running locally on port `5988`, and your local IP is `192.1
 To run nginx-local-ip in front of your webapp, simply launch the Docker container with the following command:
 
 ```shell
-docker run --rm \
+docker run --rm --pull always\
     -e APP_URL=http://192.168.0.3:5988 \
     -p 443:443 \
     medicmobile/nginx-local-ip
