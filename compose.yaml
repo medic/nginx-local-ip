@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   nginx-local-ip:
     container_name: nginx-local-ip 
@@ -10,7 +8,6 @@ services:
       - "${HTTPS}:443"
     volumes:
       - ./default.conf.template:/etc/nginx/templates/default.conf.template
-      - ./entrypoint.sh:/entrypoint.sh
     environment:
       APP_URL: $APP_URL
       HTTP: $HTTP
@@ -24,4 +21,5 @@ networks:
   default:
     ipam:
       config:
+        # Useful for ensuring the assigned network address is within the range configured for your firewall rules
         - subnet: 172.16.0.0/16
